@@ -1,7 +1,10 @@
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 
 public class Booking {
@@ -26,8 +29,16 @@ public class Booking {
         this.otherGuests = new ArrayList<>();
     }
 
-    public Booking(Room room, Guest guest, BookingType type)
-    {
+    public Booking(Room room, LocalDate startDate, LocalDate endDate, Guest guest, BookingType type, List<Guest> otherGuests) {
+        this.room = room;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.guest = guest;
+        this.type = type;
+        this.otherGuests = otherGuests;
+    }
+
+    public Booking(Room room, Guest guest, BookingType type) {
         this(room, LocalDate.now(), LocalDate.now().plusDays(6), guest, type);
     }
 
@@ -87,11 +98,27 @@ public class Booking {
         otherGuests.remove(guest);
     }
 
-    public String getBookingString()
+    public long getBookingLength()
     {
-        String guestListString = guest.getGuestString() + ", " +
-                otherGuests.stream().map(Guest::getGuestString).collect(Collectors.joining(", "));
-        return "Mistnost " + room.getRoomNumber() + " je zarezervovana od " + ListOfBookings.FORMATTER.format(startDate)
-                + " do " + ListOfBookings.FORMATTER.format(endDate) + " pro hosty " + guestListString;
+        return DAYS.between(startDate, endDate);
+    }
+
+    public BigDecimal getBookingPrice()
+    {
+        return BigDecimal.valueOf(getBookingLength()).multiply(BigDecimal.valueOf(getRoom().getPricePerNight()));
+    }
+
+    public int getNumberOfGuests() {
+        // at least one guest has to be specified
+        int count = 1;
+        count += otherGuests.size();
+        return count;
+    }
+
+    @Override
+    public String toString() {
+        return BookingManager.FORMATTER.format(startDate) + " az " + BookingManager.FORMATTER.format(endDate) + ": " +
+                guest.toString() + "[" + String.valueOf(getNumberOfGuests()) + ", " + getRoom().isSeeViewCzech() + "] za " + String.valueOf(getBookingPrice());
+
     }
 }

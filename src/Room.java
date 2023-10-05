@@ -53,6 +53,14 @@ public class Room {
         return seeView;
     }
 
+    public String isSeeViewCzech() {
+        if(seeView){
+            return "ano";
+        } else {
+            return"ne";
+        }
+    }
+
     public void setSeeView(boolean seeView) {
         this.seeView = seeView;
     }

@@ -5,11 +5,10 @@ public class Guest {
     private String surname;
     private LocalDate birthDate;
 
-    public Guest(String name, String surname, LocalDate birthDate)
-    {
-        this.name=name;
-        this.surname=surname;
-        this.birthDate=birthDate;
+    public Guest(String name, String surname, LocalDate birthDate) {
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
     }
 
     public void setName(String name) {
@@ -36,7 +35,8 @@ public class Guest {
         return surname;
     }
 
-    public String getGuestString() {
-        return name + " " + surname + " (" + ListOfBookings.FORMATTER.format(birthDate) + ")" ;
+    @Override
+    public String toString() {
+        return name + " " + surname + " (" + BookingManager.FORMATTER.format(birthDate) + ")";
     }
 }
