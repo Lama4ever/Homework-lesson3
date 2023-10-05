@@ -48,7 +48,6 @@ public class BookingManager {
         {
             guestCount+=booking.getNumberOfGuests();
         }
-        System.out.println(guestCount + " " + bookingList.size());
         average = BigDecimal.valueOf(guestCount).divide(BigDecimal.valueOf(bookingList.size()),new MathContext(5));
         return average;
     }
